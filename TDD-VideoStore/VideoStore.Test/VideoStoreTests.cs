@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VideoStore.BL;
+using NSubstitute;
 
 namespace VideoStore.Test
 {
@@ -16,7 +17,7 @@ namespace VideoStore.Test
         [SetUp]
         public void Setup()
         {
-            rentals = new Rentals();
+            rentals = Substitute.For<IRentals>();
             sut = new VideoStoreLibrary(rentals);
         }
         [Test]
@@ -42,6 +43,19 @@ namespace VideoStore.Test
            });
 
         }
+        [Test]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(null)]
+
+        public void Exception_Movie_Title_Cannot_Be_Null_Or_Empty(string input)
+        {
+            Assert.Throws<FormatException>(() =>
+            {
+                sut.AddMovie(new Movie(input));
+            });
+        }
+
         [Test]
         public void Can_Register_Customer()
         {

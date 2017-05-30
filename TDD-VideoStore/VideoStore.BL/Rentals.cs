@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VideoStore.BL
 {
-    class Rentals : IRentals
+    public class Rentals : IRentals
     {
         public void AddRental(string movieTitle, string socialSecurityNumber)
         {

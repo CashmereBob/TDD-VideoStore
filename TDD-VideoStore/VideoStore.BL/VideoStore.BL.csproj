@@ -41,13 +41,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Customer.cs" />
+    <Compile Include="CustomerAllocationException.cs" />
     <Compile Include="IRentals.cs" />
     <Compile Include="IVideoStore.cs" />
     <Compile Include="Movie.cs" />
+    <Compile Include="MovieAllocationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rental.cs" />
     <Compile Include="Rentals.cs" />
-    <Compile Include="VideoStore.cs" />
+    <Compile Include="VideoStoreLibrary.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

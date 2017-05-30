@@ -10,6 +10,8 @@ namespace VideoStore.BL
     {
         void RegisterCustomer(string name, string socialSecurityNumber);
         void AddMovie(Movie movie);
+
+        Movie GetMovie(string title);
         void RentMovie(string movieTitle, string socialSecurityNumber);
         List<Customer> GetCustomers();
         void ReturnMovie(string movieTitle, string socialSecurityNumber);

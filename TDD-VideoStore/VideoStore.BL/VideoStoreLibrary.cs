@@ -66,10 +66,17 @@ namespace VideoStore.BL
 
         public void RentMovie(string movieTitle, string socialSecurityNumber)
         {
+            if (Movies.Contains(new Movie(movieTitle)) && Customers.Contains(new Customer {SSN = socialSecurityNumber }))
+            {
+
+                _rentals.AddRental(movieTitle, socialSecurityNumber);
+
+            }
         }
 
         public void ReturnMovie(string movieTitle, string socialSecurityNumber)
         {
+            _rentals.RemoveRental(movieTitle, socialSecurityNumber);
         }
 
 
@@ -77,6 +84,11 @@ namespace VideoStore.BL
         {
             return Movies.FirstOrDefault(m => m.Title == title);
 
+        }
+
+        public void RegisterCustomer(Customer customer)
+        {
+            Customers.Add(customer);
         }
     }
 }

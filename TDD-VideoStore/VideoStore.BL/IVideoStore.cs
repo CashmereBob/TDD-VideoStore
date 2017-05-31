@@ -15,5 +15,6 @@ namespace VideoStore.BL
         void RentMovie(string movieTitle, string socialSecurityNumber);
         List<Customer> GetCustomers();
         void ReturnMovie(string movieTitle, string socialSecurityNumber);
+        void RegisterCustomer(Customer testCustomer);
     }
 }

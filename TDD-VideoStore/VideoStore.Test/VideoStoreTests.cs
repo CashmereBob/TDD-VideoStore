@@ -14,11 +14,17 @@ namespace VideoStore.Test
     {
         public IVideoStore sut { get; set; }
         public IRentals rentals { get; set; }
+
+        public Customer testCustomer { get; set; }
+        public Movie testMovie { get; set; }
         [SetUp]
         public void Setup()
         {
             rentals = Substitute.For<IRentals>();
             sut = new VideoStoreLibrary(rentals);
+
+            testCustomer = new Customer { Name = "Mange", SSN="1910-05-23" };
+            testMovie = new Movie { Title = "Rambo" };
         }
         [Test]
         public void Can_Add_Movie()
@@ -85,5 +91,51 @@ namespace VideoStore.Test
                 sut.RegisterCustomer("Robin", "10-10-100");
             });
         }
+
+        [Test]
+        public void Cannot_Rent_Non_Existing_Movie()
+        {
+            sut.RegisterCustomer(testCustomer.Name, testCustomer.SSN);
+            sut.RentMovie(testMovie.Title, testCustomer.SSN);
+
+            rentals.DidNotReceive().AddRental(Arg.Any<string>(), Arg.Any<string>());
+        }
+
+        [Test]
+        public void Cannot_Rent_With_Non_Existing_Customer()
+        {
+            sut.AddMovie(testMovie);
+            sut.RentMovie(testMovie.Title, testCustomer.SSN);
+
+            rentals.DidNotReceive().AddRental(Arg.Any<string>(), Arg.Any<string>());
+        }
+
+        [Test]
+        public void Can_Rent_Movie()
+        {
+            sut.AddMovie(testMovie);
+            sut.RegisterCustomer(testCustomer);
+
+            sut.RentMovie(testMovie.Title, testCustomer.SSN);
+
+            rentals.Received(1).AddRental(Arg.Is<string>(m => m.Contains(testMovie.Title)), Arg.Is<string>(m => m.Contains(testCustomer.SSN)));
+        }
+
+        [Test]
+        public void Can_Return_Movie()
+        {
+            sut.AddMovie(testMovie);
+            sut.RegisterCustomer(testCustomer);
+
+            sut.RentMovie(testMovie.Title, testCustomer.SSN);
+            sut.ReturnMovie(testMovie.Title, testCustomer.SSN);
+
+            rentals.Received(1).RemoveRental(Arg.Is<string>(m => m.Contains(testMovie.Title)), Arg.Is<string>(m => m.Contains(testCustomer.SSN)));
+        }
+
+
+
+
+
     }
 }

@@ -2,7 +2,7 @@
 
 namespace VideoStore.BL
 {
-    public class Movie
+    public class Movie : IEquatable<Movie>
     {
         private string title;
 
@@ -18,7 +18,6 @@ namespace VideoStore.BL
             }
         }
 
-
         public Movie()
         {
 
@@ -26,6 +25,18 @@ namespace VideoStore.BL
         public Movie(string title)
         {
             Title = title;
+        }
+
+        public bool Equals(Movie other)
+        {
+            if(Title == other.Title)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -10,6 +10,10 @@ namespace VideoStore.UI
     {
         static void Main(string[] args)
         {
+            var menu = new Menu();
+
+            menu.Run();
+            
         }
     }
 }

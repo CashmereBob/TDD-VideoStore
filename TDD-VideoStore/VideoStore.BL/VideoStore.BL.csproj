@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerAllocationException.cs" />
+    <Compile Include="DateTimeService.cs" />
     <Compile Include="IDateTime.cs" />
     <Compile Include="IRentals.cs" />
     <Compile Include="IVideoStore.cs" />

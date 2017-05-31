@@ -66,16 +66,27 @@ namespace VideoStore.BL
 
         public void RentMovie(string movieTitle, string socialSecurityNumber)
         {
-            if (Movies.Contains(new Movie(movieTitle)) && Customers.Contains(new Customer {SSN = socialSecurityNumber }))
+            if (!Movies.Contains(new Movie(movieTitle)))
             {
-
-                _rentals.AddRental(movieTitle, socialSecurityNumber);
-
+                throw new MovieAllocationException($"{movieTitle} not in stock");
             }
+
+            if (!Customers.Contains(new Customer { SSN = socialSecurityNumber }))
+            {
+                throw new CustomerAllocationException($"User with SSN: {socialSecurityNumber} is not registered.");
+            }
+
+            _rentals.AddRental(movieTitle, socialSecurityNumber);
         }
 
         public void ReturnMovie(string movieTitle, string socialSecurityNumber)
         {
+
+            if (!_rentals.GetRentalsFor(socialSecurityNumber).Any(x => x.movieTitle == movieTitle))
+            {
+                throw new MovieAllocationException($"{movieTitle} not rented by {socialSecurityNumber}");
+            }
+
             _rentals.RemoveRental(movieTitle, socialSecurityNumber);
         }
 
@@ -88,7 +99,7 @@ namespace VideoStore.BL
 
         public void RegisterCustomer(Customer customer)
         {
-            Customers.Add(customer);
+            RegisterCustomer(customer.Name, customer.SSN);
         }
     }
 }

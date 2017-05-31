@@ -96,7 +96,11 @@ namespace VideoStore.Test
         public void Cannot_Rent_Non_Existing_Movie()
         {
             sut.RegisterCustomer(testCustomer.Name, testCustomer.SSN);
-            sut.RentMovie(testMovie.Title, testCustomer.SSN);
+
+            Assert.Throws<MovieAllocationException>(() => {
+                sut.RentMovie(testMovie.Title, testCustomer.SSN);
+            });
+            
 
             rentals.DidNotReceive().AddRental(Arg.Any<string>(), Arg.Any<string>());
         }
@@ -105,7 +109,11 @@ namespace VideoStore.Test
         public void Cannot_Rent_With_Non_Existing_Customer()
         {
             sut.AddMovie(testMovie);
-            sut.RentMovie(testMovie.Title, testCustomer.SSN);
+
+            Assert.Throws<CustomerAllocationException>(() => {
+                sut.RentMovie(testMovie.Title, testCustomer.SSN);
+            });
+
 
             rentals.DidNotReceive().AddRental(Arg.Any<string>(), Arg.Any<string>());
         }
@@ -124,10 +132,14 @@ namespace VideoStore.Test
         [Test]
         public void Can_Return_Movie()
         {
+            
+
             sut.AddMovie(testMovie);
-            sut.RegisterCustomer(testCustomer);
+            sut.RegisterCustomer(testCustomer.Name, testCustomer.SSN);
 
             sut.RentMovie(testMovie.Title, testCustomer.SSN);
+
+            rentals.GetRentalsFor(testCustomer.SSN).Returns(new List<Rental> { new Rental(testMovie.Title, testCustomer.SSN, new DateTime(2018,01,01)) });
             sut.ReturnMovie(testMovie.Title, testCustomer.SSN);
 
             rentals.Received(1).RemoveRental(Arg.Is<string>(m => m.Contains(testMovie.Title)), Arg.Is<string>(m => m.Contains(testCustomer.SSN)));

@@ -49,6 +49,7 @@
     <Compile Include="MovieAllocationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rental.cs" />
+    <Compile Include="RentalAllocationException.cs" />
     <Compile Include="Rentals.cs" />
     <Compile Include="VideoStoreLibrary.cs" />
   </ItemGroup>

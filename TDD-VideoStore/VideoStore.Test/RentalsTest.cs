@@ -63,13 +63,64 @@ namespace VideoStore.Test
 
 
             sut.AddRental(testMovie.Title, testCustomer.SSN);
-            testMovie.Title = "Steven Segal - Har Combat 8";
+            testMovie.Title = "Steven Segal - Hard Combat 8";
             sut.AddRental(testMovie.Title, testCustomer.SSN);
 
             var rentalsOnCustomer = sut.GetRentalsFor(testCustomer.SSN);
 
             Assert.AreEqual(2, rentalsOnCustomer.Count);
             
+
+        }
+        [Test]
+        public void Cannot_Rent_More_Than_Three_Movies()
+        {
+            sut.AddRental(testMovie.Title, testCustomer.SSN);
+            testMovie.Title = "Steven Segal - Hard Combat 8";
+            sut.AddRental(testMovie.Title, testCustomer.SSN);
+            testMovie.Title = "Dunder Honung";
+            sut.AddRental(testMovie.Title, testCustomer.SSN);
+            Assert.Throws<RentalAllocationException>(() =>
+            {
+                testMovie.Title = "Benny går i skolan";
+                sut.AddRental(testMovie.Title, testCustomer.SSN);
+            });
+            Assert.That(sut.GetRentalsFor(testCustomer.SSN).Count == 3);
+        }
+        [Test]
+        public void Customer_Cannot_Rent_Two_Copies_Of_The_Same_Movie()
+        {
+            sut.AddRental(testMovie.Title, testCustomer.SSN);
+            Assert.Throws<RentalAllocationException>(() =>
+            {
+                sut.AddRental(testMovie.Title, testCustomer.SSN);
+            });
+
+        }
+        [Test]
+        public void Can_Not_Rent_If_Rental_With_Late_DueDate_Exists()
+        {
+
+            var fakeDate = new DateTime(2017, 05, 12);
+
+            dateTime.Now().Returns(fakeDate);
+
+            sut.AddRental(testMovie.Title, testCustomer.SSN);
+
+            dateTime.Now().Returns(fakeDate.AddDays(5));
+
+
+            var e = Assert.Throws<RentalAllocationException>(() =>
+            {
+                sut.AddRental("Nils Holgersson", testCustomer.SSN);
+            });
+            Assert.That(e.DueRentals.FirstOrDefault().movieTitle == testMovie.Title);
+            Assert.IsTrue(e.Message.Contains(testMovie.Title));
+            Assert.IsTrue(e.Message.Contains(fakeDate.AddDays(3).ToShortDateString()));
+
+
+
+
 
         }
 

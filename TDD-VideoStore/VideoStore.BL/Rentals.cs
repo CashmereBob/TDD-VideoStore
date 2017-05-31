@@ -19,9 +19,31 @@ namespace VideoStore.BL
 
         public void AddRental(string movieTitle, string socialSecurityNumber)
         {
+            var customerRentals = GetRentalsFor(socialSecurityNumber);
+
+            var dueDates = customerRentals.Where(r => r.dueDate < dateTime.Now()).ToList();
+
+            if(dueDates.Count() > 0)
+            {
+                throw new RentalAllocationException("Late returns: ", dueDates);
+            }
+
+            if(customerRentals.Any(r => r.movieTitle == movieTitle))
+            {
+                throw new RentalAllocationException("Already rented a copy of that movie");
+            }
+
+
+            if (customerRentals.Count() >= 3)
+            {
+                throw new RentalAllocationException();
+
+            }
+
             var dueDate = dateTime.Now();
 
             rentals.Add(new Rental(movieTitle, socialSecurityNumber, dueDate.AddDays(3)));
+
         }
 
         public List<Rental> GetRentalsFor(string socialSecurityNumber)

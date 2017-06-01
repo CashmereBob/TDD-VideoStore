@@ -33,9 +33,14 @@ namespace VideoStore.UI
                     case ConsoleKey.NumPad1:
                         RentMovie();
                         break;
-
+                    case ConsoleKey.D1:
+                        RentMovie();
+                        break;
                     // Return Movie
                     case ConsoleKey.NumPad2:
+                        ReturnMovie();
+                        break;
+                    case ConsoleKey.D2:
                         ReturnMovie();
                         break;
 
@@ -43,14 +48,25 @@ namespace VideoStore.UI
                     case ConsoleKey.NumPad3:
                         RegisterUser();
                         break;
+                    case ConsoleKey.D3:
+                        RegisterUser();
+                        break;
 
                     // Add Movie
                     case ConsoleKey.NumPad4:
                         AddMovie();
                         break;
+                    case ConsoleKey.D4:
+                        AddMovie();
+                        break;
+                    //Exit
                     case ConsoleKey.NumPad5:
                         Environment.Exit(-1);
                         break;
+                    case ConsoleKey.D5:
+                        Environment.Exit(-1);
+                        break;
+                    //Default
                     default:
                         Console.Clear();
                         break;

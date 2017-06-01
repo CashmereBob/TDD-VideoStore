@@ -19,8 +19,9 @@ namespace VideoStore.BL
         {
         }
 
-        public RentalAllocationException(string message) : base(message)
+        public RentalAllocationException(string message)
         {
+            this.message = message;
         }
         public RentalAllocationException(string message, List<Rental> dueRentals)
         {
@@ -31,8 +32,9 @@ namespace VideoStore.BL
             }
         }
 
-        public RentalAllocationException(string message, Exception innerException) : base(message, innerException)
+        public RentalAllocationException(string message, Exception innerException) : base(message,innerException)
         {
+            this.message = message;
         }
 
         protected RentalAllocationException(SerializationInfo info, StreamingContext context) : base(info, context)

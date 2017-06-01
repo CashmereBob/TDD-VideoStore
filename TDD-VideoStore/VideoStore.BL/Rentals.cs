@@ -20,15 +20,19 @@ namespace VideoStore.BL
         public void AddRental(string movieTitle, string socialSecurityNumber)
         {
             var customerRentals = GetRentalsFor(socialSecurityNumber);
-
-            var dueDates = customerRentals.Where(r => r.dueDate < dateTime.Now()).ToList();
-
-            if(dueDates.Count() > 0)
+            if (customerRentals.Count() != 0)
             {
-                throw new RentalAllocationException("Late returns: ", dueDates);
+                var rentalsWithDueDate = new List<Rental>();
+
+                rentalsWithDueDate = customerRentals.Where(r => r.dueDate < dateTime.Now()).ToList();
+
+                if (rentalsWithDueDate.Count() > 0)
+                {
+                    throw new RentalAllocationException("Late returns: ", rentalsWithDueDate);
+                }
             }
 
-            if(customerRentals.Any(r => r.movieTitle == movieTitle))
+            if (customerRentals.Any(r => r.movieTitle == movieTitle))
             {
                 throw new RentalAllocationException("Already rented a copy of that movie");
             }
@@ -36,7 +40,7 @@ namespace VideoStore.BL
 
             if (customerRentals.Count() >= 3)
             {
-                throw new RentalAllocationException();
+                throw new RentalAllocationException("Exceeded maximum allowed rentals at the same time.");
 
             }
 
